@@ -1,0 +1,112 @@
+# =========================
+# Build results
+# =========================
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# =========================
+# .NET
+# =========================
+*.runtimeconfig.dev.json
+*.deps.json
+
+# Test Results
+TestResults/
+*.trx
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Coverage
+# =========================
+coverage/
+*.coverage
+*.coveragexml
+
+# =========================
+# Environment
+# =========================
+.env
+.env.*
+
+# =========================
+# Package Managers
+# =========================
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.cache
+
+# =========================
+# AI / Local tooling
+# =========================
+.claude/
+
+# =========================
+# Publish outputs
+# =========================
+publish/
+dist/
+
+# =========================
+# Resharper
+# =========================
+_ReSharper*/
+*.DotSettings.user
+
+# =========================
+# Dotnet tool artifacts
+# =========================
+.dotnet/
+
+# =========================
+# Local secrets
+# =========================
+secrets.json
+appsettings.Development.json

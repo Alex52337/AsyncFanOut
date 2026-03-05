@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>AsyncFanOut</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>AsyncFanOut Contributors</Authors>
+    <Description>Task Aggregator for BFF architectures — parallel fan-out with partial results, cache-first serving, background completion, and request deduplication. Improves perceived latency for frontend applications by returning the first available result immediately while continuing remaining tasks in the background.</Description>
+    <PackageTags>bff;backend-for-frontend;aggregator;fanout;fan-out;async;cache;microservices;partial-response;task-orchestration</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/AsyncFanOut/AsyncFanOut</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AsyncFanOut/AsyncFanOut</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>Copyright © AsyncFanOut Contributors</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>AsyncFanOut.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
