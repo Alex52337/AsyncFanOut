@@ -10,7 +10,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>AsyncFanOut</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>AsyncFanOut Contributors</Authors>
     <Description>Task Aggregator for BFF architectures — parallel fan-out with partial results, cache-first serving, background completion, and request deduplication. Improves perceived latency for frontend applications by returning the first available result immediately while continuing remaining tasks in the background.</Description>
     <PackageTags>bff;backend-for-frontend;aggregator;fanout;fan-out;async;cache;microservices;partial-response;task-orchestration</PackageTags>
