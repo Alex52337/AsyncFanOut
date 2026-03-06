@@ -13,10 +13,10 @@ public record Notification(int Id, string Message, bool IsRead);
 
 // ── Fake downstream services ─────────────────────────────────────────────────
 
-public interface IProfileService    { Task<UserProfile> GetProfileAsync(string userId); }
-public interface IOrderService      { Task<List<Order>> GetOrdersAsync(string userId); }
+public interface IProfileService { Task<UserProfile> GetProfileAsync(string userId); }
+public interface IOrderService { Task<List<Order>> GetOrdersAsync(string userId); }
 public interface IRecommendationService { Task<List<Recommendation>> GetAsync(string userId); }
-public interface INotificationService   { Task<List<Notification>> GetUnreadAsync(string userId); }
+public interface INotificationService { Task<List<Notification>> GetUnreadAsync(string userId); }
 
 public sealed class FakeProfileService : IProfileService
 {
@@ -42,7 +42,7 @@ public sealed class FakeRecommendationService : IRecommendationService
 {
     public async Task<List<Recommendation>> GetAsync(string userId)
     {
-        await Task.Delay(80); // Simulate 80ms latency
+        await Task.Delay(10000); // Simulate 80ms latency
         return
         [
             new("Clean Code", "Books", 0.95),

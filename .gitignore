@@ -110,3 +110,4 @@ _ReSharper*/
 # =========================
 secrets.json
 appsettings.Development.json
+apikey.txt

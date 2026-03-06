@@ -62,7 +62,7 @@ public sealed class DistributedAggregationCache : IAggregationCache
         var wrapper = Deserialize(bytes);
         if (wrapper is null || wrapper.IsExpired) return (false, false, null);
 
-        return (true, wrapper.IsStale, wrapper.Value);
+        return (true, wrapper.IsStale, wrapper.GetDeserializedValue(_jsonOptions));
     }
 
     /// <inheritdoc/>
@@ -71,9 +71,14 @@ public sealed class DistributedAggregationCache : IAggregationCache
         var ratio = Math.Clamp(StaleRatio, double.Epsilon, 1.0);
         var now = DateTimeOffset.UtcNow;
 
+        var valueElement = value is null
+            ? (JsonElement?)null
+            : JsonSerializer.SerializeToElement(value, value.GetType(), _jsonOptions);
+
         var wrapper = new DistributedCacheEntryWrapper
         {
-            Value = value,
+            Value = valueElement,
+            TypeName = value?.GetType().AssemblyQualifiedName,
             StaleAt = now.Add(TimeSpan.FromTicks((long)(ttl.Ticks * ratio))),
             ExpiresAt = now.Add(ttl)
         };
@@ -109,11 +114,20 @@ public sealed class DistributedAggregationCache : IAggregationCache
     // Internal DTO for JSON serialisation
     private sealed class DistributedCacheEntryWrapper
     {
-        public object? Value { get; init; }
+        public JsonElement? Value { get; init; }
+        public string? TypeName { get; init; }
         public DateTimeOffset StaleAt { get; init; }
         public DateTimeOffset ExpiresAt { get; init; }
 
         public bool IsStale => DateTimeOffset.UtcNow > StaleAt;
         public bool IsExpired => DateTimeOffset.UtcNow > ExpiresAt;
+
+        public object? GetDeserializedValue(JsonSerializerOptions options)
+        {
+            if (Value is null || TypeName is null) return null;
+            var type = Type.GetType(TypeName);
+            if (type is null) return null;
+            return Value.Value.Deserialize(type, options);
+        }
     }
 }
