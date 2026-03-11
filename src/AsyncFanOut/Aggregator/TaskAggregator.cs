@@ -103,19 +103,31 @@ internal sealed class TaskAggregator : ITaskAggregator
             return new AggregationResult(values, metadata, isComplete: true, ctx);
         }
 
-        // ── Phase 3: Wait for first completion ─────────────────────────────────
+        // ── Phase 3: Wait for WaitForCompletion tasks (or first completion if none) ─
         bool callerCancelled = false;
         try
         {
-            await Task.WhenAny(pending.Select(p => p.Task))
-                      .WaitAsync(cancellationToken)
-                      .ConfigureAwait(false);
+            var mandatoryTasks = pending
+                .Where(p => p.Descriptor.WaitForCompletion)
+                .Select(p => p.Task)
+                .ToList();
+
+            Task waitTask = mandatoryTasks.Count > 0
+                ? Task.WhenAll(mandatoryTasks)
+                : Task.WhenAny(pending.Select(p => p.Task));
+
+            await waitTask.WaitAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             _logger?.LogDebug(
                 "Aggregation run {CorrelationId} caller cancelled before first result.", ctx.CorrelationId);
             callerCancelled = true;
+        }
+        catch (Exception) when (pending.Any(p => p.Descriptor.WaitForCompletion))
+        {
+            // A WaitForCompletion task faulted — WhenAll surfaces the exception but the individual
+            // task result is handled in Phase 4 via ApplyCompletedTaskAsync. Swallow here.
         }
 
         // ── Phase 4: Snapshot all completed tasks ───────────────────────────────

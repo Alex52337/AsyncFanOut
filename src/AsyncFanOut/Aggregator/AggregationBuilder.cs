@@ -28,17 +28,24 @@ public sealed class AggregationBuilder
     /// Compatible with Polly without a hard dependency:
     /// <code>policyWrapper: inner => retryPolicy.ExecuteAsync(inner)</code>
     /// </param>
+    /// <param name="waitForCompletion">
+    /// When <see langword="true"/>, the aggregator will not return until this task
+    /// has completed (successfully, faulted, or timed out).
+    /// Defaults to <see langword="false"/>.
+    /// </param>
     /// <returns>This builder instance for chaining.</returns>
     public AggregationBuilder Add<T>(
         string key,
         Func<Task<T>> task,
         TimeSpan ttl,
         TimeSpan? timeout = null,
-        Func<Func<Task<T>>, Task<T>>? policyWrapper = null)
+        Func<Func<Task<T>>, Task<T>>? policyWrapper = null,
+        bool waitForCompletion = false)
     {
         Tasks.Add(new AggregationTask<T>(key, task, ttl, timeout)
         {
-            PolicyWrapper = policyWrapper
+            PolicyWrapper = policyWrapper,
+            WaitForCompletion = waitForCompletion
         });
         return this;
     }

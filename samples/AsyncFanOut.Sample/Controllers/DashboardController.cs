@@ -20,16 +20,19 @@ public interface INotificationService { Task<List<Notification>> GetUnreadAsync(
 
 public sealed class FakeProfileService : IProfileService
 {
-    public Task<UserProfile> GetProfileAsync(string userId) =>
-        Task.FromResult(new UserProfile(userId, $"User {userId}", $"{userId}@example.com",
+    public async Task<UserProfile> GetProfileAsync(string userId)
+    {
+        await Task.Delay(2000);
+        return await Task.FromResult(new UserProfile(userId, $"User {userId}", $"{userId}@example.com",
             $"https://avatars.example.com/{userId}"));
+    }
 }
 
 public sealed class FakeOrderService : IOrderService
 {
     public async Task<List<Order>> GetOrdersAsync(string userId)
     {
-        await Task.Delay(30); // Simulate 30ms latency
+        await Task.Delay(30000); // Simulate 30ms latency
         return
         [
             new(1, "Widget Pro", 49.99m, DateTimeOffset.UtcNow.AddDays(-5)),
@@ -109,7 +112,8 @@ public sealed class DashboardController : ControllerBase
             builder.Add(
                 key: $"profile:{userId}",
                 task: () => _profileService.GetProfileAsync(userId),
-                ttl: TimeSpan.FromMinutes(5));
+                ttl: TimeSpan.FromMinutes(5),
+                mandatory: true);
 
             builder.Add(
                 key: $"orders:{userId}",

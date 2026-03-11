@@ -18,6 +18,13 @@ public abstract class AggregationTaskBase
     /// </summary>
     public TimeSpan? Timeout { get; }
 
+    /// <summary>
+    /// When <see langword="true"/>, the aggregator will not return until this task
+    /// has completed (successfully, faulted, or timed out). Other tasks may still
+    /// be in-flight and will complete in the background.
+    /// </summary>
+    public bool WaitForCompletion { get; init; }
+
     /// <summary>Initialises a new <see cref="AggregationTaskBase"/>.</summary>
     protected AggregationTaskBase(string key, TimeSpan ttl, TimeSpan? timeout)
     {
